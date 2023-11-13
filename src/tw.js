@@ -133,6 +133,8 @@ generate.addEventListener("click", () => {
 	document.getElementById("map-container").innerHTML = "";
 	sortedMap = adjusttMap(originalData, server);
 	if (sortedMap) drawMap(sortedMap, server);
+	document.getElementById("top-faction").checked = false;
+	document.getElementById("top-server").checked = false;
 });
 
 document.getElementById("top-faction").addEventListener("click", () => {

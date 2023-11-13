@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
-</head>
-
-<body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-  </main>
-</body>
-
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="styles.css" />
+		<title>TW UD Map</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<div class="center">
+			<input
+				id="server"
+				type="number"
+				placeholder="Server Number"
+				max="3000"
+				min="1"
+			/>
+			<button id="generate">Generate Map</button>
+		</div>
+		<div id="map-container"></div>
+		<p>Page created by berserker (S779) Data by Nass(S1232)</p>
+		<script src="tw.js"></script>
+	</body>
 </html>

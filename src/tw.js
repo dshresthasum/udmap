@@ -11,10 +11,11 @@ let colors = {
 	9: "#EB8258",
 };
 
-let top20 = [
+let top20Faction = [
 	770, 835, 1248, 851, 1313, 1508, 1432, 779, 1618, 1035, 2216, 913, 341, 1410,
 	1640, 1805, 1547, 1174, 1569,
 ];
+let top10Server = [770, 2216, 835, 1248, 1508, 851, 341, 779, 148, 1432];
 //console.log(colors["1"]);
 
 let generate = document.getElementById("generate");
@@ -99,8 +100,11 @@ function drawMap(sortedMap, server = 779) {
 		cell.className = "cell";
 		cell.id = "s" + item.sid;
 
-		if (top20.includes(item.sid)) {
-			cell.classList.add("super-server");
+		if (top20Faction.includes(item.sid)) {
+			cell.classList.add("top-faction");
+		}
+		if (top10Server.includes(item.sid)) {
+			cell.classList.add("top-server");
 		}
 		//cell.style.background = colors[item.color % 9];
 		if (item.sid === server) {
@@ -129,4 +133,14 @@ generate.addEventListener("click", () => {
 	document.getElementById("map-container").innerHTML = "";
 	sortedMap = adjusttMap(originalData, server);
 	if (sortedMap) drawMap(sortedMap, server);
+});
+
+document.getElementById("top-faction").addEventListener("click", () => {
+	let topFaction = document.querySelectorAll(".top-faction");
+	topFaction.forEach((top) => top.classList.toggle("visible-tf"));
+});
+
+document.getElementById("top-server").addEventListener("click", () => {
+	let topServer = document.querySelectorAll(".top-server");
+	topServer.forEach((top) => top.classList.toggle("visible-ts"));
 });

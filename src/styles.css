@@ -12,9 +12,6 @@ body {
   font-size: 1em;
   font-weight: bold;
 }
-#s779 {
-  background-color: chartreuse;
-}
 span {
   font-size: 0.7em;
   font-weight: normal;
@@ -55,6 +52,12 @@ button {
 p {
   text-align: center;
   font-size: 0.85em;
+}
+
+.super-server{
+  box-shadow: rgb(255, 85, 113) 0px 0px 0px 3px,
+    rgb(188, 27, 193) 0px 0px 0px 6px;
+  z-index: 11;
 }
 .main-server {
   box-shadow: rgb(85, 91, 255) 0px 0px 0px 3px,

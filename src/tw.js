@@ -11,6 +11,10 @@ let colors = {
 	9: "#EB8258",
 };
 
+let top20 = [
+	770, 835, 1248, 851, 1313, 1508, 1432, 779, 1618, 1035, 2216, 913, 341, 1054,
+	1547, 591, 1432,
+];
 //console.log(colors["1"]);
 
 let generate = document.getElementById("generate");
@@ -95,6 +99,9 @@ function drawMap(sortedMap, server = 779) {
 		cell.className = "cell";
 		cell.id = "s" + item.sid;
 
+		if (top20.includes(item.sid)) {
+			cell.classList.add("super-server");
+		}
 		//cell.style.background = colors[item.color % 9];
 		if (item.sid === server) {
 			cell.classList.add("main-server");

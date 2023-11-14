@@ -1,29 +1,10 @@
-let colors = {
-	0: "rgb(129 114 73 / 68%)",
-	1: "#DB2763",
-	2: "#B0DB43",
-	3: "#12EAEA",
-	4: "#BCE7FD",
-	5: "#C492B1",
-	6: "#E2C044",
-	7: "rgb(115 29 216 / 44%)",
-	8: "rgb(137 6 6 / 49%)",
-	9: "#EB8258",
-};
+import { colors, top20Factions, top20Servers } from "./weekly.js";
 
-let top20Faction = [
-	770, 835, 1248, 851, 1313, 1508, 1432, 779, 1618, 1035, 2216, 913, 341, 1410,
-	1640, 1805, 1547, 1174, 1569,
-];
-let top10Server = [
-	770, 2216, 835, 1248, 1508, 851, 341, 779, 148, 1432, 1618, 591, 935, 1313,
-	913, 1035, 174, 1258, 1545, 1244,
-];
-//console.log(colors["1"]);
-
+const MAP_WIDTH = 28;
 let generate = document.getElementById("generate");
-
+let mapContainer = document.getElementById("map-container");
 let originalData = [];
+
 fetch("./ud_2_map_tw.json")
 	.then((response) => response.json())
 	.then((json) => {
@@ -37,7 +18,6 @@ fetch("./ud_2_map_tw.json")
 		if (sortedMap) drawMap(sortedMap);
 	});
 
-let mapContainer = document.getElementById("map-container");
 function adjusttMap(res, server = 779) {
 	let fullData = [];
 	let validServer = res.filter((item) => item.sid === server);
@@ -45,7 +25,6 @@ function adjusttMap(res, server = 779) {
 		alert("Please enter valid server");
 		return;
 	}
-	let data = [];
 	//loop to fill data missing 0 as coordinate
 	for (let item of res) {
 		let singleItem = item;
@@ -60,39 +39,39 @@ function adjusttMap(res, server = 779) {
 		let subX = Number(item.pos.x - chosenServer[0].pos.x); //779= x6,y2, 2254 = x21, y17  diff x15,y15
 		let subY = Number(item.pos.y - chosenServer[0].pos.y);
 
-		singleItem.x = subX < 0 ? 28 + subX : subX;
-		singleItem.y = subY < 0 ? 28 + subY : subY;
+		//
+		singleItem.pos = {};
+		singleItem.pos.x = subX < 0 ? 28 + subX : subX;
+		singleItem.pos.y = subY < 0 ? 28 + subY : subY;
 		singleItem.sid = item.sid;
 		singleItem.color = item.color;
 		singleItem.msid = item.msid;
+
 		normalizedData.push(singleItem);
 	});
 
 	return sortMap(normalizedData);
 }
 
-function compare(a, b) {
-	return a.y - b.y;
-}
-
-function drawMap(sortedMap, server = 779) {
+function drawMap(sortedMap, server = 779, udRound = 0) {
 	//(x=8, y=23)
 	for (let item of sortedMap) {
-		item.x = (item.x + 13) % 28;
-		item.y = (item.y + 13) % 28;
+		item.pos.x = (item.pos.x + 13) % MAP_WIDTH;
+		item.pos.y = (item.pos.y + 13) % MAP_WIDTH;
 	}
+
 	sortedMap = sortMap(sortedMap);
-	let lastRow = sortedMap.filter((item) => item.x === 27);
-	let lastCol = sortedMap.filter((item) => item.y === 27);
+	let lastRow = sortedMap.filter((item) => item.pos.x === MAP_WIDTH - 1);
+	let lastCol = sortedMap.filter((item) => item.pos.y === MAP_WIDTH - 1);
 	sortedMap.unshift(...lastRow);
 	lastCol.unshift(lastCol[lastCol.length - 1]);
 	let count = 0;
 	sortedMap.map((item, idx) => {
-		if (idx % 28 === 0) {
+		if (idx % MAP_WIDTH === 0) {
 			let cell = document.createElement("div");
 			cell.className = "cell";
 			cell.id = "s" + lastCol.sid;
-			//cell.style.background = colors[lastCol[count].color % 9];
+			//cell.style.background = colors[lastCol[count].color % 10];
 			cell.innerHTML = `<div>${lastCol[count].sid}</div>`;
 
 			cell.innerHTML += `<span>F-${lastCol[count].msid}</span>`;
@@ -103,18 +82,21 @@ function drawMap(sortedMap, server = 779) {
 		cell.className = "cell";
 		cell.id = "s" + item.sid;
 
-		if (top20Faction.includes(item.sid)) {
+		//Style top 20 faction leaders
+		if (top20Factions[udRound].server.includes(item.sid)) {
 			cell.classList.add("top-faction");
 		}
-		if (top10Server.includes(item.sid)) {
+
+		//Style top 20 server
+		if (top20Servers.includes(item.sid)) {
 			cell.classList.add("top-server");
 		}
-		//cell.style.background = colors[item.color % 9];
+
+		//cell.style.background = colors[item.color % 10];
+
 		if (item.sid === server) {
 			cell.classList.add("main-server");
-			cell.style.background = colors[2];
 		}
-		//cell.style.background = item.sid === server ? "chartreuse": "#fff"
 		cell.innerHTML = `<div>${item.sid}</div>`;
 		cell.innerHTML += `<span>F-${item.msid}</span>`;
 
@@ -124,17 +106,22 @@ function drawMap(sortedMap, server = 779) {
 
 function sortMap(normalizedData) {
 	let data = [];
-	for (let i = 0; i < 28; i++) {
-		data[i] = normalizedData.filter((item) => item.x === i).sort(compare);
+	for (let i = 0; i < MAP_WIDTH; i++) {
+		data[i] = normalizedData.filter((item) => item.pos.x === i).sort(compare);
 	}
 	let fullSorted = [].concat.apply([], data);
 	return fullSorted;
 }
 
+function compare(a, b) {
+	return a.pos.y - b.pos.y;
+}
+
+/******EVENTS********/
 generate.addEventListener("click", () => {
 	let server = Number(document.getElementById("server").value);
 	document.getElementById("map-container").innerHTML = "";
-	sortedMap = adjusttMap(originalData, server);
+	let sortedMap = adjusttMap(originalData, server);
 	if (sortedMap) drawMap(sortedMap, server);
 	document.getElementById("top-faction").checked = false;
 	document.getElementById("top-server").checked = false;

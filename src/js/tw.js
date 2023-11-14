@@ -1,23 +1,26 @@
-import { colors, top20Factions, top20Servers } from "./weekly.js";
+import { colors, factionMap, top20Servers } from "./weekly.js";
 
 const MAP_WIDTH = 28;
 let generate = document.getElementById("generate");
 let mapContainer = document.getElementById("map-container");
 let originalData = [];
 
-fetch("./ud_2_map_tw.json")
-	.then((response) => response.json())
-	.then((json) => {
-		originalData = [...json];
+let fetcher = (url, server = 779, round = 0) => {
+	fetch(url)
+		.then((response) => response.json())
+		.then((json) => {
+			originalData = [...json];
 
-		let sortedMap = adjusttMap(json);
-		if (sortedMap) return sortedMap;
-		//drawMap(sortedMap);
-	})
-	.then((sortedMap) => {
-		if (sortedMap) drawMap(sortedMap);
-	});
+			let sortedMap = adjusttMap(json, server);
+			if (sortedMap) drawMap(sortedMap, server, round);
+		});
+};
 
+window.onload = () => {
+	let results = fetcher("./json/ud_2_round_0.json");
+	//console.log(results);
+	loadRounds();
+};
 function adjusttMap(res, server = 779) {
 	let fullData = [];
 	let validServer = res.filter((item) => item.sid === server);
@@ -83,7 +86,7 @@ function drawMap(sortedMap, server = 779, udRound = 0) {
 		cell.id = "s" + item.sid;
 
 		//Style top 20 faction leaders
-		if (top20Factions[udRound].server.includes(item.sid)) {
+		if (factionMap[udRound].server.includes(item.sid)) {
 			cell.classList.add("top-faction");
 		}
 
@@ -117,14 +120,27 @@ function compare(a, b) {
 	return a.pos.y - b.pos.y;
 }
 
-/******EVENTS********/
-generate.addEventListener("click", () => {
-	let server = Number(document.getElementById("server").value);
-	document.getElementById("map-container").innerHTML = "";
-	let sortedMap = adjusttMap(originalData, server);
-	if (sortedMap) drawMap(sortedMap, server);
+function loadRounds() {
+	let rounds = document.getElementById("rounds");
+	factionMap.forEach((round) => {
+		rounds.innerHTML += `<option class="opts" value=${round.round}>Round ${round.round}</option>`;
+	});
+}
+
+let clearMap = () => {
+	mapContainer.innerHTML = "";
+
 	document.getElementById("top-faction").checked = false;
 	document.getElementById("top-server").checked = false;
+};
+/******EVENTS********/
+generate.addEventListener("click", () => {
+	clearMap();
+	let server = Number(document.getElementById("server").value);
+	let round = document.getElementById("rounds").value;
+
+	let url = factionMap[round].url;
+	fetcher(url, server, round);
 });
 
 document.getElementById("top-faction").addEventListener("click", () => {

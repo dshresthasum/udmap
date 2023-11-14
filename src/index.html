@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="styles.css" />
+		<link rel="stylesheet" href="css/styles.css" />
 		<title>TW UD Map</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,31 +13,34 @@
 		/>
 	</head>
 	<body>
-		<div class="center">
-			<input
-				id="server"
-				type="number"
-				placeholder="Server Number"
-				max="3000"
-				min="1"
-			/>
-			<button id="generate">Generate Map</button>
+		<div id="header-container" class="center">
+			<div>
+				<input
+					id="server"
+					type="number"
+					placeholder="Server Number"
+					max="3000"
+					min="1"
+				/>
+				<select name="rounds" id="rounds"></select>
+				<button id="generate">Generate Map</button>
+			</div>
 
-			<span style="margin-left: 6em; color: #fff" class="top-faction-legend"
-				>TF</span
-			>
-			<input id="top-faction" type="checkbox" />
-			<span>Top 20 Faction Ranking</span>
-			<span class="top-server-legend ts-span">TS</span>
-			<input
-				id="top-server"
-				type="checkbox"
-				style="margin-left: 0em; color: #fff"
-			/>
-			<span>Top 20 Server Ranking</span>
+			<div id="legend">
+				<section>
+					<span class="top-faction-legend">TF</span>
+					<input id="top-faction" type="checkbox" />
+					<label>Top 20 Faction Ranking</label>
+
+					<span class="top-server-legend ts-span">TS</span>
+					<input id="top-server" type="checkbox" />
+
+					<label>Top 20 Server Ranking</label>
+				</section>
+			</div>
 		</div>
 		<div id="map-container"></div>
 		<p>Page created by berserker (S779) Data by Nass(S1232)</p>
-		<script type="module" src="tw.js"></script>
+		<script type="module" src="js/tw.js"></script>
 	</body>
 </html>

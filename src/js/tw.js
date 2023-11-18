@@ -113,6 +113,10 @@ function drawCell(item, server, udRound) {
 	if (item.sid !== item.msid && count > 1)
 		cell.style.background = colors[item.color];
 
+	// if (item.sid !== item.msid && count == 1) {
+	// 	//cell.style.background = "none !important";
+	// }
+
 	//faction leader
 	if (item.sid === item.msid && count > 1) {
 		//cell.style.background = "rgb(255, 255, 255)";

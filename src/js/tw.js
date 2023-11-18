@@ -10,7 +10,10 @@ let fetcher = (url, server = 779, round = 0) => {
 		.then((response) => response.json())
 		.then((json) => {
 			originalData = [...json];
-			getFactions(originalData);
+			factions = originalData.filter((item) => item.msid === item.sid);
+			document.getElementById(
+				"total-factions"
+			).innerHTML = `Total Factions: ${factions.length}`;
 			let sortedMap = adjusttMap(json, server);
 			if (sortedMap) drawMap(sortedMap, server, round);
 		});
@@ -19,14 +22,9 @@ let fetcher = (url, server = 779, round = 0) => {
 window.onload = () => {
 	let round = factionMap.length - 1;
 	fetcher(`./json/ud_2_round_${round}.json`, 779, round);
-	//console.log(results);
 	loadRounds();
 };
 
-function getFactions(data) {
-	factions = data.filter((item) => item.msid === item.sid);
-	console.log(factions);
-}
 function adjusttMap(res, server = 779) {
 	let fullData = [];
 	let validServer = res.filter((item) => item.sid === server);
@@ -110,32 +108,23 @@ function drawCell(item, server, udRound) {
 	}
 
 	let count = getMsidCount(item.msid);
-	if (item.sid !== item.msid && count > 1)
-		cell.style.background = colors[item.color];
-
-	// if (item.sid !== item.msid && count == 1) {
-	// 	//cell.style.background = "none !important";
-	// }
 
 	//faction leader
 	if (item.sid === item.msid && count > 1) {
-		//cell.style.background = "rgb(255, 255, 255)";
-
 		cell.style.background = `radial-gradient(
 			circle,
 			rgba(255, 255, 255, 0) 0%,
 			${colors[item.color]} 100%
 		) `;
-		//cell.classList.add("faction-leader");
-		// 	background: rgb(255, 255, 255) !important;
-		//background: !important;
 	}
+	//faction subordinates
+	if (item.sid !== item.msid && count > 1)
+		cell.style.background = colors[item.color];
 
+	//if color data is not assigned on the json, assign color for the faction
 	if (!item.color && count > 1) {
 		cell.style.background = colors[7];
 		if (item.msid === item.sid) {
-			//cell.style.background = "rgb(255, 255, 255)";
-
 			cell.style.background = `radial-gradient(
 			circle,
 			rgba(255, 255, 255, 0) 0%,
@@ -149,8 +138,7 @@ function drawCell(item, server, udRound) {
 
 	//let subFaction = item.sid !== item.msid ? "class ='sub-faction'" : "";
 
-	cell.innerHTML = `<div >${item.msid}</div>`;
-	cell.innerHTML += `<span>#${item.sid}</span>`;
+	cell.innerHTML = `<div >${item.msid}</div> <span>#${item.sid}</span>`;
 
 	if (item.isRebel) {
 		cell.classList.add("rebel");
@@ -158,6 +146,7 @@ function drawCell(item, server, udRound) {
 
 	mapContainer.appendChild(cell);
 }
+
 function sortMap(normalizedData) {
 	let data = [];
 	for (let i = 0; i < MAP_WIDTH; i++) {
@@ -204,7 +193,3 @@ document.getElementById("top-server").addEventListener("click", () => {
 	let topServer = document.querySelectorAll(".top-server");
 	topServer.forEach((top) => top.classList.toggle("visible-ts"));
 });
-
-function getRandom(min = 4, max = 9) {
-	return Math.floor(Math.random() * (max - min) + 1);
-}

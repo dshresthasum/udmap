@@ -21,13 +21,18 @@ body {
 #map-container {
 	display: grid;
 	grid-template-columns: repeat(29, 1fr);
+	border-top: 1px solid;
+	border-left: 1px solid;
 }
 #header-container {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: 3fr 1fr 2fr;
 	background: linear-gradient(35deg, green, turquoise);
 }
 
+#total-factions {
+	padding: 1em;
+}
 /* <select> styles */
 select,
 input[type="number"] {
@@ -89,11 +94,12 @@ input[type="number"] {
 }
 .cell {
 	padding: 15px 0;
-	border: 1px solid;
+	border-bottom: 1px solid;
 	text-align: center;
 	font-size: 1em;
 	font-weight: bold;
 	position: relative;
+	border-right: 1px solid;
 }
 /* .cell:before {
 	content: " ";
@@ -199,13 +205,17 @@ p {
 	box-shadow: none;
 }
 
-.visible-tf,
+.visible-tf {
+	box-shadow: inset rgb(255, 85, 113) 0px 0px 0px 4px,
+		inset rgb(188, 27, 193) 0px 0px 0px 9px;
+	z-index: 11;
+}
+
 .top-faction-legend {
 	box-shadow: rgb(255, 85, 113) 0px 0px 0px 3px,
 		rgb(188, 27, 193) 0px 0px 0px 6px;
 	z-index: 11;
 }
-
 .visible-ts,
 .top-server-legend {
 	background: rgb(26, 0, 199) !important;
@@ -217,11 +227,9 @@ p {
 	color: #fff;
 }
 .main-server {
-	background: #7c943f !important;
-	background: radial-gradient(at center, #7c943f, #347b0a) !important;
-	box-shadow: rgb(85, 91, 255) 0px 0px 0px 3px, rgb(31, 193, 27) 0px 0px 0px 6px,
-		rgb(255, 217, 19) 0px 0px 0px 9px;
-	z-index: 11;
+	box-shadow: inset rgb(85, 91, 255) 0px 0px 0px 4px,
+		inset rgb(31, 193, 27) 0px 0px 0px 8px,
+		inset rgb(255, 217, 19) 0px 0px 0px 12px;
 }
 
 .ts-span {

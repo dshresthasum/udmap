@@ -112,10 +112,33 @@ function drawCell(item, server, udRound) {
 	let count = getMsidCount(item.msid);
 	if (item.sid !== item.msid && count > 1)
 		cell.style.background = colors[item.color];
-	if (item.sid === item.msid && count > 1)
-		cell.style.background = colors[item.color];
 
-	if (!item.color && count > 1) cell.style.background = colors[7];
+	//faction leader
+	if (item.sid === item.msid && count > 1) {
+		//cell.style.background = "rgb(255, 255, 255)";
+
+		cell.style.background = `radial-gradient(
+			circle,
+			rgba(255, 255, 255, 0) 0%,
+			${colors[item.color]} 100%
+		) `;
+		//cell.classList.add("faction-leader");
+		// 	background: rgb(255, 255, 255) !important;
+		//background: !important;
+	}
+
+	if (!item.color && count > 1) {
+		cell.style.background = colors[7];
+		if (item.msid === item.sid) {
+			//cell.style.background = "rgb(255, 255, 255)";
+
+			cell.style.background = `radial-gradient(
+			circle,
+			rgba(255, 255, 255, 0) 0%,
+			${colors[7]} 100%
+		) `;
+		}
+	}
 	if (item.sid === server) {
 		cell.classList.add("main-server");
 	}

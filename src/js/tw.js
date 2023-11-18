@@ -3,13 +3,14 @@ import { colors, factionMap, top20Servers } from "./weekly.js";
 const MAP_WIDTH = 28;
 let generate = document.getElementById("generate");
 let mapContainer = document.getElementById("map-container");
+let factions = [];
 let originalData = [];
 let fetcher = (url, server = 779, round = 0) => {
 	fetch(url)
 		.then((response) => response.json())
 		.then((json) => {
 			originalData = [...json];
-
+			getFactions(originalData);
 			let sortedMap = adjusttMap(json, server);
 			if (sortedMap) drawMap(sortedMap, server, round);
 		});
@@ -21,6 +22,11 @@ window.onload = () => {
 	//console.log(results);
 	loadRounds();
 };
+
+function getFactions(data) {
+	factions = data.filter((item) => item.msid === item.sid);
+	console.log(factions);
+}
 function adjusttMap(res, server = 779) {
 	let fullData = [];
 	let validServer = res.filter((item) => item.sid === server);
@@ -57,6 +63,13 @@ function adjusttMap(res, server = 779) {
 	return sortMap(normalizedData);
 }
 
+function getMsidCount(msid) {
+	let count = originalData.reduce((acc, cur) => {
+		if (cur.msid === msid) acc++;
+		return acc;
+	}, 0);
+	return count;
+}
 function drawMap(sortedMap, server = 779, udRound = 0) {
 	//(x=8, y=23)
 	for (let item of sortedMap) {
@@ -96,9 +109,13 @@ function drawCell(item, server, udRound) {
 		cell.classList.add("top-server");
 	}
 
-	//if (item.sid !== item.msid)
-	cell.style.background = colors[item.color];
+	let count = getMsidCount(item.msid);
+	if (item.sid !== item.msid && count > 1)
+		cell.style.background = colors[item.color];
+	if (item.sid === item.msid && count > 1)
+		cell.style.background = colors[item.color];
 
+	if (!item.color && count > 1) cell.style.background = colors[7];
 	if (item.sid === server) {
 		cell.classList.add("main-server");
 	}
@@ -160,3 +177,7 @@ document.getElementById("top-server").addEventListener("click", () => {
 	let topServer = document.querySelectorAll(".top-server");
 	topServer.forEach((top) => top.classList.toggle("visible-ts"));
 });
+
+function getRandom(min = 4, max = 9) {
+	return Math.floor(Math.random() * (max - min) + 1);
+}

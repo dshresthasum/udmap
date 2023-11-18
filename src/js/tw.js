@@ -96,16 +96,17 @@ function drawCell(item, server, udRound) {
 		cell.classList.add("top-server");
 	}
 
-	cell.style.background = colors[item.color % 10];
+	//if (item.sid !== item.msid)
+	cell.style.background = colors[item.color];
 
 	if (item.sid === server) {
 		cell.classList.add("main-server");
 	}
 
-	let subFaction = item.sid !== item.msid ? "class ='sub-faction'" : "";
+	//let subFaction = item.sid !== item.msid ? "class ='sub-faction'" : "";
 
 	cell.innerHTML = `<div >${item.msid}</div>`;
-	cell.innerHTML += `<span ${subFaction}>#${item.sid}</span>`;
+	cell.innerHTML += `<span>#${item.sid}</span>`;
 
 	if (item.isRebel) {
 		cell.classList.add("rebel");

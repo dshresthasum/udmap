@@ -4,7 +4,6 @@ const MAP_WIDTH = 28;
 let generate = document.getElementById("generate");
 let mapContainer = document.getElementById("map-container");
 let originalData = [];
-
 let fetcher = (url, server = 779, round = 0) => {
 	fetch(url)
 		.then((response) => response.json())
@@ -17,7 +16,8 @@ let fetcher = (url, server = 779, round = 0) => {
 };
 
 window.onload = () => {
-	let results = fetcher("./json/ud_2_round_0.json");
+	let round = factionMap.length - 1;
+	fetcher(`./json/ud_2_round_${round}.json`, 779, round);
 	//console.log(results);
 	loadRounds();
 };
@@ -49,6 +49,7 @@ function adjusttMap(res, server = 779) {
 		singleItem.sid = item.sid;
 		singleItem.color = item.color;
 		singleItem.msid = item.msid;
+		singleItem.isRebel = item.isRebel;
 
 		normalizedData.push(singleItem);
 	});
@@ -70,43 +71,48 @@ function drawMap(sortedMap, server = 779, udRound = 0) {
 	lastCol.unshift(lastCol[lastCol.length - 1]);
 	let count = 0;
 	sortedMap.map((item, idx) => {
+		//repeat last col to draw as first col
 		if (idx % MAP_WIDTH === 0) {
-			let cell = document.createElement("div");
-			cell.className = "cell";
-			cell.id = "s" + lastCol.sid;
-			//cell.style.background = colors[lastCol[count].color % 10];
-			cell.innerHTML = `<div>${lastCol[count].sid}</div>`;
-
-			cell.innerHTML += `<span>F-${lastCol[count].msid}</span>`;
-			mapContainer.appendChild(cell);
+			drawCell(lastCol[count], server, udRound);
 			count++;
 		}
-		let cell = document.createElement("div");
-		cell.className = "cell";
-		cell.id = "s" + item.sid;
-
-		//Style top 20 faction leaders
-		if (factionMap[udRound].server.includes(item.sid)) {
-			cell.classList.add("top-faction");
-		}
-
-		//Style top 20 server
-		if (top20Servers.includes(item.sid)) {
-			cell.classList.add("top-server");
-		}
-
-		//cell.style.background = colors[item.color % 10];
-
-		if (item.sid === server) {
-			cell.classList.add("main-server");
-		}
-		cell.innerHTML = `<div>${item.sid}</div>`;
-		cell.innerHTML += `<span>F-${item.msid}</span>`;
-
-		mapContainer.appendChild(cell);
+		//draw remaining cells
+		drawCell(item, server, udRound);
 	});
 }
 
+function drawCell(item, server, udRound) {
+	let cell = document.createElement("div");
+	cell.className = "cell";
+	cell.id = "s" + item.sid;
+
+	//Style top 20 faction leaders
+	if (factionMap[udRound].server.includes(item.sid)) {
+		cell.classList.add("top-faction");
+	}
+
+	//Style top 20 server
+	if (top20Servers.includes(item.sid)) {
+		cell.classList.add("top-server");
+	}
+
+	cell.style.background = colors[item.color % 10];
+
+	if (item.sid === server) {
+		cell.classList.add("main-server");
+	}
+
+	let subFaction = item.sid !== item.msid ? "class ='sub-faction'" : "";
+
+	cell.innerHTML = `<div >${item.msid}</div>`;
+	cell.innerHTML += `<span ${subFaction}>#${item.sid}</span>`;
+
+	if (item.isRebel) {
+		cell.classList.add("rebel");
+	}
+
+	mapContainer.appendChild(cell);
+}
 function sortMap(normalizedData) {
 	let data = [];
 	for (let i = 0; i < MAP_WIDTH; i++) {
@@ -122,8 +128,9 @@ function compare(a, b) {
 
 function loadRounds() {
 	let rounds = document.getElementById("rounds");
-	factionMap.forEach((round) => {
-		rounds.innerHTML += `<option class="opts" value=${round.round}>Round ${round.round}</option>`;
+	factionMap.forEach((round, idx) => {
+		let selected = factionMap.length - 1 === idx ? 'selected="selected"' : "";
+		rounds.innerHTML += `<option class="opts" ${selected} value=${round.round}>Round ${round.round}</option>`;
 	});
 }
 

@@ -93,7 +93,23 @@ input[type="number"] {
 	text-align: center;
 	font-size: 1em;
 	font-weight: bold;
+	position: relative;
 }
+/* .cell:before {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.6;
+	background-image: url(../assets/icons/protest.png);
+	background-repeat: no-repeat;
+	background-position: 50% 0;
+	background-size: cover;
+} */
+
 span {
 	font-size: 0.7em;
 	font-weight: normal;
@@ -215,4 +231,24 @@ p {
 	font-size: 1px;
 	position: relative;
 	top: -4px;
+}
+
+.rebel {
+	background: url(../assets/icons/protest.png) no-repeat center bottom;
+	background-size: 20px;
+}
+
+a {
+	font-size: 0.75em;
+	color: #333;
+	text-align: center;
+}
+
+.hidden {
+	display: none;
+}
+
+.sub-faction {
+	font-style: italic;
+	font-size: 0.8em;
 }

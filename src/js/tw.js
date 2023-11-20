@@ -203,7 +203,7 @@ getID("heat-map").addEventListener("click", () => {
 	let server = Number(getID("server").value);
 	let round = Number(getID("rounds").value);
 	//await fetcher(`./json/ud_2_round_${round}.json`, server, round);
-	console.log(factions);
+	//console.log(factions);
 	let sortedMap = adjusttMap(originalData, server);
 	sortedMap = sortMap(sortedMap);
 	let lastRow = sortedMap.filter((item) => item.pos.x === 14);

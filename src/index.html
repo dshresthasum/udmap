@@ -21,6 +21,7 @@
 					placeholder="Server Number"
 					max="3000"
 					min="1"
+					value="779"
 				/>
 				<select name="rounds" id="rounds"></select>
 				<button id="generate">Generate Map</button>
@@ -34,13 +35,19 @@
 
 					<span class="top-server-legend ts-span">TS</span>
 					<input id="top-server" type="checkbox" />
-
 					<label>Top 20 Server Ranking</label>
+
+					<span class="heat-map-legend ts-span">TS</span>
+					<input id="heat-map" type="checkbox" />
+					<label>Heat Map</label>
 				</section>
 			</div>
 		</div>
 		<div id="map-container"></div>
-		<p>Page created by berserker (S779) Data by Nass(S1232)</p>
+		<div id="footer">
+			<p>Page created by berserker (S779) Data by Nass(S1232)</p>
+			<div id="heat-map-index"></div>
+		</div>
 		<!-- <p>
 			<a href="https://www.flaticon.com/free-icons/fist" title="fist icons"
 				>Fist icons created by Freepik - Flaticon</a

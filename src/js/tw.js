@@ -1,5 +1,5 @@
 import { colors, factionMap, top20Servers } from "./weekly.js";
-import { compare, clearMap, getID } from "./helper.js";
+import { compare, clearMap, getID, clearElement } from "./helper.js";
 
 const MAP_WIDTH = 28;
 let generate = getID("generate");
@@ -17,6 +17,8 @@ let fetcher = async (url, server = 779, round = 0) => {
 			getID("total-factions").innerHTML = `Total Factions: ${factions.length}`;
 			let sortedMap = adjusttMap(json, server);
 			if (sortedMap) drawMap(sortedMap, server, round);
+
+			largestFactionCount = getLargestFactionCount();
 			prepareHeatMap();
 		});
 };
@@ -175,6 +177,7 @@ function prepareHeatMap() {
 /******EVENTS********/
 generate.addEventListener("click", () => {
 	clearMap();
+
 	let server = Number(getID("server").value);
 	let round = getID("rounds").value;
 
@@ -208,6 +211,7 @@ getID("heat-map").addEventListener("click", () => {
 	let heatMapIndex = getID("heat-map-index");
 	let footer = getID("footer");
 	//lastRow.unshift(lastRow[lastRow.length - 1]);
+	clearElement(heatMapIndex);
 	if (getID("heat-map").checked) {
 		colorHeatMap(lastRow[14], "ab"); //first cell
 		lastRow.forEach((item) => colorHeatMap(item, "b")); //row
@@ -250,7 +254,7 @@ getID("heat-map").addEventListener("click", () => {
 
 		footer.firstElementChild.style.textAlign = "center";
 		heatMapIndex.style.gridTemplateColumns = "none";
-		heatMapIndex.innerHTML = "";
+		clearElement(heatMapIndex);
 	}
 });
 

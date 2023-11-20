@@ -7,8 +7,12 @@ let clearMap = () => {
 
 	getID("top-faction").checked = false;
 	getID("top-server").checked = false;
+	clearElement(getID("heat-map-index"));
 };
 
+let clearElement = (element) => {
+	element.innerHTML = "";
+};
 let getID = (id) => document.getElementById(id);
 
-export { compare, clearMap, getID };
+export { compare, clearMap, getID, clearElement };

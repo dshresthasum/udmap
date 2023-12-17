@@ -179,7 +179,7 @@ generate.addEventListener("click", () => {
 	clearMap();
 
 	let server = Number(getID("server").value);
-	let round = getID("rounds").value;
+	let round = Number(getID("rounds").value);
 
 	let url = factionMap[round].url;
 	fetcher(url, server, round);
@@ -219,7 +219,7 @@ getID("heat-map").addEventListener("click", () => {
 		originalData.forEach((item) => colorHeatMap(item)); //rest of the cells
 
 		//style footer with heat map legend
-		footer.style.gridTemplateColumns = "4fr 1fr";
+		footer.style.gridTemplateColumns = "1fr 4fr";
 		footer.firstElementChild.style.textAlign = "left";
 
 		heatMapIndex.style.gridTemplateColumns = `repeat(${largestFactionCount}, 1fr)`;

@@ -52,6 +52,14 @@ const factionMap = [
 		],
 		url: "./json/ud_2_round_5.json",
 	},
+	{
+		round: 6,
+		server: [
+			770, 2216, 835, 2798, 851, 148, 1248, 1508, 779, 744, 174, 736, 1756, 913,
+			1816, 1302, 1439, 73, 2693, 2697,
+		],
+		url: "./json/ud_2_round_5.json",
+	},
 ];
 
 // let colors = {
